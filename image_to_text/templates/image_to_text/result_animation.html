@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animated Image</title>
+    <!-- Include Bootstrap CSS for the spinner -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #animation-container {
+            position: relative;
+            width: 512px;
+            height: 512px;
+            margin: 0 auto;
+        }
+        #animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Loader overlay */
+        .loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+        }
+
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .loader .spinner-border {
+            margin-bottom: 15px;
+        }
+
+        .loader p {
+            color: white;
+            margin: 0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader overlay with Bootstrap spinner and message -->
+    <div id="loaderOverlay" class="loader-overlay">
+        <div class="loader">
+            <div class="spinner-border text-light" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+
+    <h1>Animated Image</h1>
+    <div id="animation-container">
+        <img id="animation" src="/{{ output_animation_path }}" alt="Animation">
+    </div>
+
+      <div style="text-align: center;">
+            <a href="javascript:history.back()" class="button">Go Back</a>
+      </div>
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Show loader initially
+        document.getElementById('loaderOverlay').style.display = 'block';
+
+        let frames = {{ frame_paths|safe }};
+        let currentFrame = 0;
+        let imgElement = document.getElementById('animation');
+
+        function animate() {
+            if (currentFrame >= frames.length) {
+                currentFrame = 0;
+            }
+            imgElement.src = frames[currentFrame];
+            currentFrame++;
+            setTimeout(animate, 500);
+        }
+
+        window.onload = function() {
+            if (frames.length > 0) {
+                imgElement.src = frames[0];
+                setTimeout(animate, 500);
+                // Hide loader once the animation starts
+                document.getElementById('loaderOverlay').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!-- custom_animate.html -->
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="text">Enter your text:</label>
+        <input type="text" id="text" name="text" required>
+    </div>
+    <div class="form-group">
+        <label for="image">Upload an image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+    </div>
+    <div class="form-group">
+        <label for="animation_speed">Animation Speed (seconds per frame):</label>
+        <input type="number" id="animation_speed" name="animation_speed" min="0.1" max="2.0" step="0.1" value="0.5" required>
+    </div>
+    <div class="form-group">
+        <label for="num_frames">Number of Frames:</label>
+        <input type="number" id="num_frames" name="num_frames" min="1" max="30" value="10" required>
+    </div>
+    <div class="form-group">
+        <label for="style">Animation Style:</label>
+        <select id="style" name="style" required>
+            <option value="watercolor">Watercolor</option>
+            <option value="sketch">Sketch</option>
+            <option value="cartoon">Cartoon</option>
+        </select>
+    </div>
+    <button type="submit">Generate Animation</button>
+</form>
