@@ -186,4 +186,5 @@ def img2imgprompt(pipe, prompt, n=1, style=None, path='.', negative_prompt=None,
     return image
 
 def home(request):
+
     return render(request, 'image_to_text/home.html')
