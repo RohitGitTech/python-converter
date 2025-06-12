@@ -131,6 +131,7 @@ def animate_image(request):
 
                 # Generate multiple frames
                 frames = []
+                frame_paths = []
                 num_frames = 2
                 for i in range(num_frames):
                     prompt = f"A high-quality frame in the animation: {i}"
@@ -144,12 +145,16 @@ def animate_image(request):
                     frame_path = os.path.join(media_dir, f'frame_{i}.png')
                     image.save(frame_path)
                     frames.append(imageio.imread(frame_path))
+                    frame_paths.append(f'/media/frame_{i}.png')
 
                 # Create an animated GIF
                 output_animation_path = os.path.join(media_dir, 'output_animation.gif')
                 imageio.mimsave(output_animation_path, frames, duration=0.3)
 
-                return render(request, 'image_to_text/result_animation.html', {'output_animation_path': f'/media/output_animation.gif'})
+                return render(request, 'image_to_text/result_animation.html', {
+                    'output_animation_path': f'/media/output_animation.gif',
+                    'frame_paths': frame_paths
+                })
 
             except Exception as e:
                 # Handle exceptions, such as connection errors or model not found
@@ -158,6 +163,8 @@ def animate_image(request):
     else:
         form = ImageUploadForm()
     return render(request, 'image_to_text/animate.html', {'form': form})
+
+
 
 def img2imgprompt(pipe, prompt, n=1, style=None, path='.', negative_prompt=None,
                   init_images=None, strength=0.8, guidance_scale=9, seed=None):

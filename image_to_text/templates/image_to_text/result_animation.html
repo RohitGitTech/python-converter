@@ -47,6 +47,23 @@
             margin: 0;
             font-size: 18px;
         }
+
+        /* Button styling */
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -62,12 +79,22 @@
 
     <h1>Animated Image</h1>
     <div id="animation-container">
-        <img id="animation" src="/{{ output_animation_path }}" alt="Animation">
+        <img id="animation" src="{{ output_animation_path }}" alt="Animation">
     </div>
 
-      <div style="text-align: center;">
-            <a href="javascript:history.back()" class="button">Go Back</a>
-      </div>
+    <!-- Display the second frame if it exists -->
+    {% if frame_paths.1 %}
+    <div style="text-align: center; margin-top: 20px;">
+        <h2>Second Frame</h2>
+        <img src="{{ frame_paths.1 }}" alt="Second Frame" style="max-width: 512px; height: auto;">
+    </div>
+    {% endif %}
+
+    <div style="text-align: center;">
+        <a href="javascript:history.back()" class="button">Go Back</a>
+        <a id="saveImage" href="#" class="button" download>Save Image</a>
+    </div>
+
     <!-- Include jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -97,6 +124,16 @@
                 // Hide loader once the animation starts
                 document.getElementById('loaderOverlay').style.display = 'none';
             }
+
+            // Set up the save image button
+            document.getElementById('saveImage').addEventListener('click', function() {
+                var link = document.createElement('a');
+                link.href = "{{ output_animation_path }}";
+                link.download = 'animation.gif';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
         };
     </script>
 </body>
